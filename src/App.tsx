@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
 
-function App() {
+type MousePosType = {
+  x: number,
+  y: number,
+};
+
+export default function App() {
+  const [mousePos, setMousePos] = useState<MousePosType>({x: 0, y: 0});
+
+  const onMouseMove = (e: MouseEvent) => {
+    setMousePos({x: e.clientX, y: e.clientY});
+  };
+
+  useEffect(() => {
+    window.addEventListener('mousemove', onMouseMove);
+    return() =>
+      window.removeEventListener('mousemove', onMouseMove);
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <svg version="1.1"
+        baseProfile="full"
+        width="6000" height="6000"
+        xmlns="http://www.w3.org/2000/svg">
+        <line
+          x1="300"
+          x2={mousePos.x}
+          y1="300"
+          y2={mousePos.y}
+          stroke="#4A4A4A"
+          strokeWidth="2"
+        />
+        <circle cx="300" cy="300" r="5" fill="green" />
+        <circle cx={mousePos.x} cy={mousePos.y} r="5" fill="red" />
+      </svg>
   );
 }
-
-export default App;
